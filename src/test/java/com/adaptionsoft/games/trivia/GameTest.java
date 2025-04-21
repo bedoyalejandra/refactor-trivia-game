@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.trivia;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.platform.commons.annotation.Testable;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.adaptionsoft.games.uglytrivia.Game;
 
@@ -17,7 +17,7 @@ public class GameTest {
     private ByteArrayOutputStream outputStream;
     private PrintStream originalOut;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         game = new Game();
         originalOut = System.out;
@@ -25,14 +25,14 @@ public class GameTest {
         System.setOut(new PrintStream(outputStream));
     }
 
-    @Testable
+    @Test
     public void testAddingPlayers() {
         game.add("Player1");
         game.add("Player2");
         assertEquals(2, game.howManyPlayers());
     }
 
-    @Testable
+    @Test
     public void testGameIsPlayableWhenAtLeastTwoPlayersAdded() {
         game.add("Player1");
         assertFalse(game.isPlayable());
@@ -41,7 +41,7 @@ public class GameTest {
         assertTrue(game.isPlayable());
     }
 
-    @Testable
+    @Test
     public void testRollingDice() {
         game.add("Player1");
         game.roll(3);
@@ -50,7 +50,7 @@ public class GameTest {
         assertTrue(output.contains("Player1's new location is 3"));
     }
 
-    @Testable
+    @Test
     public void testPenaltyBox() {
         game.add("Player1");
         game.wrongAnswer(); // Envía al jugador a la caja de penalización
@@ -69,7 +69,7 @@ public class GameTest {
         assertTrue(output.contains("Player1 is getting out of the penalty box"));
     }
 
-    @Testable
+    @Test
     public void testWinningGame() {
         game.add("Player1");
 
@@ -85,7 +85,7 @@ public class GameTest {
         }
     }
 
-    @Testable
+    @Test
     public void testAskQuestionByCategory() {
         game.add("Player1");
 
@@ -101,7 +101,7 @@ public class GameTest {
         }
     }
 
-    @Testable
+    @Test
     public void testPlayerRotation() {
         game.add("Player1");
         game.add("Player2");
