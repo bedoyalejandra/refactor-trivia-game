@@ -36,7 +36,7 @@ public class GameTest {
     public void testGameIsPlayableWhenAtLeastTwoPlayersAdded() {
         game.add("Player1");
         assertFalse(game.isPlayable());
-
+        
         game.add("Player2");
         assertTrue(game.isPlayable());
     }
@@ -54,16 +54,16 @@ public class GameTest {
     public void testPenaltyBox() {
         game.add("Player1");
         game.wrongAnswer(); // Envía al jugador a la caja de penalización
-
+        
         // Reiniciamos la salida para la siguiente verificación
         outputStream.reset();
-
+        
         game.roll(2); // Número par, no sale de la caja
         String output = outputStream.toString();
         assertTrue(output.contains("Player1 is not getting out of the penalty box"));
-
+        
         outputStream.reset();
-
+        
         game.roll(3); // Número impar, sale de la caja
         output = outputStream.toString();
         assertTrue(output.contains("Player1 is getting out of the penalty box"));
@@ -72,7 +72,7 @@ public class GameTest {
     @Test
     public void testWinningGame() {
         game.add("Player1");
-
+        
         // Simulamos 6 respuestas correctas (ganando monedas)
         for (int i = 0; i < 6; i++) {
             game.roll(1);
@@ -88,34 +88,54 @@ public class GameTest {
     @Test
     public void testAskQuestionByCategory() {
         game.add("Player1");
-
-        // Test que se pregunte por cada categoría según la posición del jugador
-        int[] rolls = { 0, 1, 2, 3 }; // Movimientos para Pop, Science, Sports, Rock
-        String[] categorias = { "Pop", "Science", "Sports", "Rock" };
-
-        for (int i = 0; i < rolls.length; i++) {
-            outputStream.reset();
-            game.roll(rolls[i] + 1); // roll tiene que ser al menos 1
-            String output = outputStream.toString();
-            assertTrue(output.contains("The category is " + categorias[i]), "Debería contener categoría " + categorias[i]);
-        }
+        
+        // Constante para el test
+        final int BOARD_SIZE = 12;
+        
+        // Verificar categoría Pop (posición 0)
+        outputStream.reset();
+        game.roll(BOARD_SIZE); // Dar una vuelta completa y llegar a 0
+        String output = outputStream.toString();
+        assertTrue(output.contains("The category is Pop"), 
+                  "Debería contener categoría Pop: " + output);
+        
+        // Verificar categoría Science (posición 1)
+        outputStream.reset();
+        game.roll(1);
+        output = outputStream.toString();
+        assertTrue(output.contains("The category is Science"), 
+                  "Debería contener categoría Science: " + output);
+        
+        // Verificar categoría Sports (posición 2)
+        outputStream.reset();
+        game.roll(1);
+        output = outputStream.toString();
+        assertTrue(output.contains("The category is Sports"), 
+                  "Debería contener categoría Sports: " + output);
+        
+        // Verificar categoría Rock (posición 3)
+        outputStream.reset();
+        game.roll(1);
+        output = outputStream.toString();
+        assertTrue(output.contains("The category is Rock"), 
+                  "Debería contener categoría Rock: " + output);
     }
 
     @Test
     public void testPlayerRotation() {
         game.add("Player1");
         game.add("Player2");
-
+        
         game.roll(1);
         game.wasCorrectlyAnswered();
-
+        
         outputStream.reset();
         game.roll(1);
         String output = outputStream.toString();
         assertTrue(output.contains("Player2 is the current player"));
-
+        
         game.wasCorrectlyAnswered();
-
+        
         outputStream.reset();
         game.roll(1);
         output = outputStream.toString();
