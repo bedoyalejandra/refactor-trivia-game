@@ -94,8 +94,11 @@ public class GameTest {
         String[] categorias = { "Pop", "Science", "Sports", "Rock" };
 
         for (int i = 0; i < posicionesCategoria.length; i++) {
+            // Re-inicializamos el juego y el jugador para cada categoría
+            game = new Game();
             outputStream.reset();
-            game.roll(posicionesCategoria[i] - game.getPlaces()[0]); // Movemos al jugador a la posición específica
+            game.add("Player1");
+            game.roll(posicionesCategoria[i]);
             String output = outputStream.toString();
             assertTrue(output.contains("The category is " + categorias[i]));
         }
