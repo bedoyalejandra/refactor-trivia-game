@@ -89,18 +89,15 @@ public class GameTest {
     public void testAskQuestionByCategory() {
         game.add("Player1");
 
-        // Testeamos que se pregunte por cada categoría
-        int[] posicionesCategoria = { 0, 1, 2, 3 }; // Pop, Science, Sports, Rock
+        // Test que se pregunte por cada categoría según la posición del jugador
+        int[] rolls = { 0, 1, 2, 3 }; // Movimientos para Pop, Science, Sports, Rock
         String[] categorias = { "Pop", "Science", "Sports", "Rock" };
 
-        for (int i = 0; i < posicionesCategoria.length; i++) {
-            // Re-inicializamos el juego y el jugador para cada categoría
-            game = new Game();
+        for (int i = 0; i < rolls.length; i++) {
             outputStream.reset();
-            game.add("Player1");
-            game.roll(posicionesCategoria[i]);
+            game.roll(rolls[i] + 1); // roll tiene que ser al menos 1
             String output = outputStream.toString();
-            assertTrue(output.contains("The category is " + categorias[i]));
+            assertTrue(output.contains("The category is " + categorias[i]), "Debería contener categoría " + categorias[i]);
         }
     }
 
@@ -109,13 +106,19 @@ public class GameTest {
         game.add("Player1");
         game.add("Player2");
 
-        assertEquals(0, game.getCurrentPlayer());
         game.roll(1);
         game.wasCorrectlyAnswered();
-        assertEquals(1, game.getCurrentPlayer()); // Debería haber cambiado al jugador 2
 
+        outputStream.reset();
         game.roll(1);
+        String output = outputStream.toString();
+        assertTrue(output.contains("Player2 is the current player"));
+
         game.wasCorrectlyAnswered();
-        assertEquals(0, game.getCurrentPlayer()); // Debería haber vuelto al jugador 1
+
+        outputStream.reset();
+        game.roll(1);
+        output = outputStream.toString();
+        assertTrue(output.contains("Player1 is the current player"));
     }
 }
